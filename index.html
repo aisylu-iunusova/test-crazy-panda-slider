@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test Crazy Panda</title>
+    <link
+      rel="stylesheet"
+      href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"
+    />
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <style>
+      #red,
+      #green,
+      #blue {
+        float: left;
+        clear: left;
+        width: 300px;
+        margin: 15px;
+      }
+      #swatch {
+        width: 120px;
+        height: 100px;
+        margin-top: 18px;
+        margin-left: 350px;
+        background-image: none;
+      }
+      #red .ui-slider-range {
+        background: #ef2929;
+      }
+      #red .ui-slider-handle {
+        border-color: #ef2929;
+      }
+      #green .ui-slider-range {
+        background: #8ae234;
+      }
+      #green .ui-slider-handle {
+        border-color: #8ae234;
+      }
+      #blue .ui-slider-range {
+        background: #729fcf;
+      }
+      #blue .ui-slider-handle {
+        border-color: #729fcf;
+      }
+
+      .textBox {
+        padding: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <fieldset>
+      <legend>Select</legend>
+
+      <input type="radio" name="colors" id="color" value="color" checked />
+      <label for="color">color</label>
+
+      <input
+        type="radio"
+        name="colors"
+        id="backgroundColor"
+        value="background-color"
+      />
+      <label for="backgroundColor">backgroundColor</label>
+    </fieldset>
+
+    <div>
+      <div id="red"></div>
+      <div id="green"></div>
+      <div id="blue"></div>
+
+      <div id="swatch" class="ui-widget-content ui-corner-all textBox">
+        Если хочешь победить весь мир, победи себя.
+      </div>
+    </div>
+
+    <script>
+      $(function () {
+        function hexFromRGB(r, g, b) {
+          let hex = [r.toString(16), g.toString(16), b.toString(16)];
+          $.each(hex, function (nr, val) {
+            if (val.length === 1) {
+              hex[nr] = "0" + val;
+            }
+          });
+          return hex.join("").toUpperCase();
+        }
+
+        function refreshSwatch() {
+          let red = $("#red").slider("value");
+          let green = $("#green").slider("value");
+          let blue = $("#blue").slider("value");
+
+          let hex = hexFromRGB(red, green, blue);
+
+          $("#swatch").css($("input:checked").val() || "color", "#" + hex);
+        }
+
+        $("#red, #green, #blue").slider({
+          orientation: "horizontal",
+          range: "min",
+          max: 255,
+          value: 127,
+          slide: refreshSwatch,
+          change: refreshSwatch,
+        });
+
+        $("input")
+          .checkboxradio({
+            icon: false,
+          })
+          .change(refreshSwatch);
+
+        $("#red").slider("value", 255);
+        $("#green").slider("value", 140);
+        $("#blue").slider("value", 60);
+      });
+    </script>
+  </body>
+</html>
